@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Resume Screening</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --dust:   #DDD1C7;
+  --silver: #C2CFB2;
+  --green:  #8DB580;
+  --mummy:  #7E8987;
+  --indigo: #4B4A67;
+  --white:  #FAFAF8;
+  --dark:   #2a2938;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Outfit', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--dust);
+  color: var(--dark);
+  min-height: 100vh;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 50% at 88% 8%, rgba(141,181,128,0.16) 0%, transparent 65%),
+    radial-gradient(ellipse 45% 55% at 4% 90%, rgba(75,74,103,0.1) 0%, transparent 65%);
+}
+
+/* TOPBAR */
+.topbar {
+  background: rgba(75,74,103,0.97);
+  backdrop-filter: blur(16px);
+  padding: 0 48px; height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid rgba(141,181,128,0.15);
+  position: sticky; top: 0; z-index: 50;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-icon { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--green), #6fa063); display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 0 18px rgba(141,181,128,0.35); }
+.brand-name { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--white); }
+.brand-name span { color: var(--green); }
+.topbar-right { display: flex; align-items: center; gap: 14px; }
+.badge { background: rgba(141,181,128,0.2); border: 1px solid rgba(141,181,128,0.35); color: var(--green); padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.back-btn { display: flex; align-items: center; gap: 8px; color: var(--dust); text-decoration: none; padding: 9px 18px; border-radius: 10px; font-size: 13px; font-weight: 500; border: 1px solid rgba(221,209,199,0.2); transition: 0.25s; }
+.back-btn:hover { background: rgba(221,209,199,0.12); }
+
+/* CONTENT */
+.content {
+  position: relative; z-index: 1;
+  padding: 56px 48px;
+  max-width: 960px; margin: 0 auto;
+}
+
+.page-header {
+  text-align: center; margin-bottom: 52px;
+  animation: fadeUp 0.4s ease both;
+}
+.page-header h1 {
+  font-family: var(--font-display);
+  font-size: 44px; font-weight: 800; color: var(--indigo);
+  letter-spacing: -0.02em; margin-bottom: 12px;
+}
+.page-header h1 span { color: var(--green); }
+.page-header p { color: var(--mummy); font-size: 15px; font-weight: 300; }
+
+/* FORM CARD */
+.form-card {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 44px 48px;
+  border: 1px solid rgba(75,74,103,0.07);
+  box-shadow: 0 8px 40px rgba(75,74,103,0.08);
+  animation: fadeUp 0.5s ease 0.1s both;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.form-group { display: flex; flex-direction: column; }
+
+.form-label {
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--mummy); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.form-label span { font-size: 15px; }
+
+textarea {
+  flex: 1;
+  padding: 18px 20px;
+  border: 1.5px solid rgba(75,74,103,0.15);
+  border-radius: 14px;
+  font-family: var(--font-body); font-size: 14px;
+  color: var(--dark); background: var(--dust);
+  resize: vertical; outline: none; transition: 0.25s;
+  line-height: 1.65; min-height: 220px;
+}
+textarea:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(141,181,128,0.15);
+  background: var(--white);
+}
+textarea::placeholder { color: var(--mummy); font-weight: 300; }
+
+/* File upload */
+.file-upload-area {
+  border: 2px dashed rgba(75,74,103,0.2);
+  border-radius: 14px;
+  background: var(--dust);
+  padding: 40px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.25s;
+  position: relative;
+  min-height: 220px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+}
+.file-upload-area:hover { border-color: var(--green); background: rgba(141,181,128,0.07); }
+.file-upload-area.has-file { border-color: var(--green); background: rgba(141,181,128,0.08); }
+.upload-icon { font-size: 40px; }
+.upload-text { font-size: 14px; font-weight: 500; color: var(--indigo); }
+.upload-hint { font-size: 12px; color: var(--mummy); font-weight: 300; }
+.file-name { font-size: 13px; font-weight: 600; color: var(--green); margin-top: 4px; }
+
+input[type="file"] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+
+.submit-btn {
+  width: 100%; padding: 16px; margin-top: 32px;
+  background: var(--indigo); color: var(--white);
+  border: none; border-radius: 14px;
+  font-family: var(--font-body); font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: 0.3s;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.submit-btn:hover { background: var(--green); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(141,181,128,0.3); }
+
+/* RESULT */
+.result-card {
+  margin-top: 36px;
+  background: var(--white);
+  border-radius: 22px;
+  padding: 36px 40px;
+  border: 1px solid rgba(141,181,128,0.25);
+  box-shadow: 0 6px 28px rgba(75,74,103,0.07);
+  position: relative; overflow: hidden;
+  animation: fadeUp 0.4s ease both;
+}
+.result-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+  background: linear-gradient(to bottom, var(--green), var(--indigo));
+  border-radius: 22px 0 0 22px;
+}
+.result-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.result-icon { width: 40px; height: 40px; border-radius: 12px; background: rgba(141,181,128,0.15); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.result-header h2 { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--indigo); }
+.result-body { white-space: pre-wrap; font-size: 14px; line-height: 1.8; color: var(--dark); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <div class="brand">
+    <div class="brand-icon"><img src="static\Screenshot 2026-06-07 135430.png " width="40" height="40"></a></div>
+    <div class="brand-name">HRMS <span></span></div>
+  </div>
+  <div class="topbar-right">
+    <span class="badge">📄 Resume Screening</span>
+    <a href="/hr-dashboard" class="back-btn">← Dashboard</a>
+  </div>
+</nav>
+
+<div class="content">
+
+  <div class="page-header">
+    <h1>Resume <span>Screening</span> AI</h1>
+    <p>Upload a candidate resume and compare it with the job description using AI analysis.</p>
+  </div>
+
+  <div class="form-card">
+    <form method="POST" enctype="multipart/form-data">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label class="form-label"><span>📝</span> Job Description</label>
+          <textarea name="job_description" rows="8" placeholder="Paste the full job description here — required skills, responsibilities, qualifications..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"><span>📎</span> Upload Resume (PDF)</label>
+          <div class="file-upload-area" id="dropArea">
+            <input type="file" name="resume" accept=".pdf" required id="fileInput" onchange="handleFile(this)">
+            <div class="upload-icon">📄</div>
+            <div class="upload-text">Click to upload or drag & drop</div>
+            <div class="upload-hint">Supports PDF files only</div>
+            <div class="file-name" id="fileName"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <button type="submit" class="submit-btn">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Analyze Resume with AI
+      </button>
+
+    </form>
+
+    {% if result %}
+    <div class="result-card">
+      <div class="result-header">
+        <div class="result-icon">🤖</div>
+        <h2>AI Evaluation Result</h2>
+      </div>
+      <div class="result-body">{{ result }}</div>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<script>
+function handleFile(input) {
+  const area = document.getElementById('dropArea');
+  const nameEl = document.getElementById('fileName');
+  if (input.files && input.files[0]) {
+    area.classList.add('has-file');
+    nameEl.textContent = '✅ ' + input.files[0].name;
+  }
+}
+</script>
+</body>
+</html>

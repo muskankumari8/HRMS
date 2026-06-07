@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI HRMS — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --dust:   #DDD1C7;
+  --silver: #C2CFB2;
+  --green:  #8DB580;
+  --mummy:  #7E8987;
+  --indigo: #4B4A67;
+  --white:  #FAFAF8;
+  --dark:   #2a2938;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Outfit', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  min-height: 100vh;
+  display: flex;
+  background: var(--dust);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Split layout */
+.left-panel {
+  width: 45%;
+  background: var(--indigo);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 60px 56px;
+  position: relative; overflow: hidden;
+}
+
+/* decorative circles */
+.left-panel::before {
+  content: '';
+  position: absolute; top: -80px; right: -80px;
+  width: 300px; height: 300px; border-radius: 50%;
+  background: rgba(141,181,128,0.12);
+}
+.left-panel::after {
+  content: '';
+  position: absolute; bottom: -60px; left: -60px;
+  width: 240px; height: 240px; border-radius: 50%;
+  background: rgba(221,209,199,0.07);
+}
+
+.brand-mark {
+  position: relative; z-index: 1; text-align: center; margin-bottom: 48px;
+}
+.brand-icon {
+  width: 72px; height: 72px; border-radius: 20px;
+  background: linear-gradient(135deg, var(--green), #6fa063);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; margin: 0 auto 20px;
+  box-shadow: 0 0 40px rgba(141,181,128,0.4);
+}
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 32px; font-weight: 800; color: var(--white); letter-spacing: -0.02em;
+}
+.brand-name span { color: var(--green); }
+.brand-tagline {
+  color: rgba(221,209,199,0.6); font-size: 14px; font-weight: 300;
+  margin-top: 8px; letter-spacing: 0.05em;
+}
+
+.features {
+  position: relative; z-index: 1; width: 100%;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.feature-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 18px 20px; border-radius: 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+.feature-icon {
+  font-size: 22px; flex-shrink: 0; margin-top: 2px;
+}
+.feature-text strong {
+  display: block; color: var(--white); font-size: 14px; font-weight: 600; margin-bottom: 3px;
+}
+.feature-text span { color: rgba(221,209,199,0.55); font-size: 12px; font-weight: 300; }
+
+/* Right panel */
+.right-panel {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding: 60px 56px;
+  position: relative;
+}
+
+/* ambient glow */
+.right-panel::before {
+  content: '';
+  position: absolute; top: -50px; right: -50px;
+  width: 300px; height: 300px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(141,181,128,0.12), transparent);
+  pointer-events: none;
+}
+
+.login-card {
+  width: 100%; max-width: 420px;
+  background: var(--white);
+  border-radius: 24px;
+  padding: 48px 44px;
+  box-shadow: 0 12px 48px rgba(75,74,103,0.1);
+  border: 1px solid rgba(75,74,103,0.07);
+  animation: fadeUp 0.5s ease both;
+}
+
+.login-header { margin-bottom: 36px; }
+.login-header h1 {
+  font-family: var(--font-display);
+  font-size: 30px; font-weight: 800; color: var(--indigo);
+  letter-spacing: -0.02em; margin-bottom: 8px;
+}
+.login-header p { color: var(--mummy); font-size: 14px; font-weight: 300; }
+
+.form-group { margin-bottom: 20px; }
+.form-label {
+  display: block; font-size: 12px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--mummy); margin-bottom: 8px;
+}
+
+.input-wrap { position: relative; }
+.input-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  font-size: 16px; pointer-events: none;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+  width: 100%; padding: 13px 14px 13px 42px;
+  border: 1.5px solid rgba(75,74,103,0.15);
+  border-radius: 12px;
+  font-family: var(--font-body); font-size: 14px; font-weight: 400;
+  color: var(--dark); background: var(--white);
+  outline: none; transition: 0.25s;
+  appearance: none; -webkit-appearance: none;
+}
+input:focus, select:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(141,181,128,0.15);
+}
+select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237E8987' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; }
+
+.submit-btn {
+  width: 100%; padding: 15px;
+  background: var(--indigo);
+  color: var(--white); border: none; border-radius: 12px;
+  font-family: var(--font-body); font-size: 15px; font-weight: 600;
+  cursor: pointer; margin-top: 8px;
+  transition: 0.3s; letter-spacing: 0.03em;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.submit-btn:hover { background: var(--green); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(141,181,128,0.3); }
+
+.divider { display: flex; align-items: center; gap: 12px; margin: 24px 0 20px; }
+.divider-line { flex: 1; height: 1px; background: rgba(75,74,103,0.1); }
+.divider-text { font-size: 11px; color: var(--mummy); font-weight: 500; letter-spacing: 0.05em; }
+
+.error-msg {
+  text-align: center; font-size: 13px; font-weight: 500;
+  color: #c0554a; background: rgba(192,85,74,0.08);
+  border: 1px solid rgba(192,85,74,0.2);
+  padding: 10px 16px; border-radius: 10px; margin-top: 16px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  body { flex-direction: column; }
+  .left-panel { width: 100%; padding: 40px 28px; }
+  .features { display: none; }
+  .right-panel { padding: 40px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LEFT PANEL -->
+<div class="left-panel">
+  <div class="brand-mark">
+    <div class="brand-icon"><img src="static\Screenshot 2026-06-07 135430.png " width="40" height="40"></a></div>
+    <div class="brand-name"> <span>HRMS</span></div>
+    <div class="brand-tagline">Human Resource Management System</div>
+  </div>
+  <div class="features">
+    <div class="feature-item">
+      <div class="feature-icon">🤖</div>
+      <div class="feature-text">
+        <strong>AI-Powered Recruitment</strong>
+        <span>Resume screening & interview evaluation powered by AI</span>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">📊</div>
+      <div class="feature-text">
+        <strong>Smart Analytics</strong>
+        <span>Real-time attendance, payroll & performance dashboards</span>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🔮</div>
+      <div class="feature-text">
+        <strong>Attrition Prediction</strong>
+        <span>Identify at-risk employees before they leave</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right-panel">
+  <div class="login-card">
+
+    <div class="login-header">
+      <h1>Welcome back</h1>
+      <p>Sign in to your HRMS account to continue.</p>
+    </div>
+
+    <form method="POST">
+
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <div class="input-wrap">
+          <span class="input-icon">👤</span>
+          <input type="text" name="username" placeholder="Enter your username" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" name="password" placeholder="Enter your password" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <div class="input-wrap">
+          <span class="input-icon">🎭</span>
+          <select name="role" required>
+            <option value="">Select your role</option>
+            <option>Admin</option>
+            <option>HR Recruiter</option>
+            <option>Senior Manager</option>
+            <option>Employee</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">
+        Sign In
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+
+    </form>
+
+    {% if message %}
+    <div class="error-msg">⚠️ {{ message }}</div>
+    {% endif %}
+
+  </div>
+</div>
+
+</body>
+</html>

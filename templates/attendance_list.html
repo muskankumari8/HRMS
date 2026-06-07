@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Records - AI HRMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dust:   #DDD1C7;
+            --silver: #C2CFB2;
+            --green:  #8DB580;
+            --mummy:  #7E8987;
+            --ink:    #4B4A67;
+            --white:  #FAFAF8;
+            --shadow: rgba(75,74,103,0.12);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            background: var(--dust);
+            padding: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -140px; right: -140px;
+            width: 460px; height: 460px;
+            background: radial-gradient(circle, rgba(141,181,128,0.2) 0%, transparent 65%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -100px; left: -80px;
+            width: 360px; height: 360px;
+            background: radial-gradient(circle, rgba(194,207,178,0.22) 0%, transparent 65%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        header {
+            padding: 48px 56px 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity:0; transform: translateY(20px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+
+        .brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 11px;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: var(--mummy);
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 40px;
+            font-weight: 300;
+            color: var(--ink);
+        }
+
+        h1 span { color: var(--green); font-weight: 600; }
+
+        .record-count {
+            align-self: flex-end;
+            font-size: 12px;
+            color: var(--mummy);
+            letter-spacing: 0.05em;
+            padding-bottom: 8px;
+        }
+
+        .table-wrap {
+            margin: 32px 56px 60px;
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: 0 4px 32px var(--shadow);
+            overflow: hidden;
+            animation: fadeUp 0.65s ease 0.1s both;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        thead tr { background: var(--ink); }
+
+        thead th {
+            padding: 16px 20px;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--silver);
+            text-align: left;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(126,137,135,0.1);
+            transition: background 0.2s;
+        }
+
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: rgba(194,207,178,0.12); }
+
+        tbody td {
+            padding: 15px 20px;
+            font-size: 14px;
+            color: var(--ink);
+            vertical-align: middle;
+        }
+
+        /* ID */
+        td:nth-child(1) { font-size: 12px; color: var(--mummy); font-weight: 500; }
+        /* Name */
+        td:nth-child(2) { font-weight: 500; }
+        /* Date */
+        td:nth-child(3) { font-size: 13px; color: var(--mummy); }
+
+        /* Status badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 5px 13px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .status-present  { background: rgba(141,181,128,0.18); color: #4a7a40; }
+        .status-present .status-dot  { background: #4a7a40; }
+
+        .status-absent   { background: rgba(180,100,90,0.12);  color: #a0524a; }
+        .status-absent .status-dot   { background: #c97c6e; }
+
+        .status-wfh      { background: rgba(126,137,135,0.14); color: var(--ink); }
+        .status-wfh .status-dot      { background: var(--mummy); }
+
+        .status-leave    { background: rgba(194,207,178,0.35); color: #5a6e50; }
+        .status-leave .status-dot    { background: var(--silver); border: 1px solid #5a6e50; }
+
+        .delete-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            background: rgba(180,100,90,0.1);
+            color: #a0524a;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .delete-btn:hover {
+            background: rgba(180,100,90,0.2);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 800px) {
+            header { padding: 32px 20px 0; }
+            .table-wrap { margin: 24px 12px 40px; border-radius: 16px; }
+            thead th, tbody td { padding: 12px 12px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <div class="brand-icon"><img src="static\Screenshot 2026-06-07 135430.png " width="40" height="40"></a></div>
+        <div class="brand">HRMS</div>
+        <h1>Attendance <span>Records</span></h1>
+    </div>
+    <div class="record-count">{% if attendance_records %}{{ attendance_records|length }} records{% endif %}</div>
+</header>
+
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Employee Name</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in attendance_records %}
+            <tr>
+                <td>{{ record[0] }}</td>
+                <td>{{ record[1] }}</td>
+                <td>{{ record[2] }}</td>
+                <td>
+                    {% set s = record[3]|lower %}
+                    <span class="status-badge
+                        {% if 'present' in s %}status-present
+                        {% elif 'absent' in s %}status-absent
+                        {% elif 'home' in s or 'wfh' in s %}status-wfh
+                        {% else %}status-leave{% endif %}">
+                        <span class="status-dot"></span>
+                        {{ record[3] }}
+                    </span>
+                </td>
+                <td>
+                    <a href="/delete-attendance/{{ record[0] }}"
+                       class="delete-btn"
+                       onclick="return confirm('Delete attendance record?')">
+                       ✕ Delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

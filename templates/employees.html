@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Management - AI HRMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dust:    #DDD1C7;
+            --silver:  #C2CFB2;
+            --green:   #8DB580;
+            --mummy:   #7E8987;
+            --ink:     #4B4A67;
+            --white:   #FAFAF8;
+            --shadow:  rgba(75,74,103,0.14);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            background: var(--dust);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -160px; right: -160px;
+            width: 520px; height: 520px;
+            background: radial-gradient(circle, rgba(141,181,128,0.22) 0%, transparent 65%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -120px; left: -120px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(194,207,178,0.28) 0%, transparent 65%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 880px;
+            background: var(--white);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 8px 48px var(--shadow);
+            animation: fadeIn 0.7s ease both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Left panel */
+        .side-panel {
+            width: 260px;
+            flex-shrink: 0;
+            background: var(--ink);
+            padding: 50px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .side-panel::before {
+            content: '';
+            position: absolute;
+            bottom: -60px; right: -60px;
+            width: 220px; height: 220px;
+            border-radius: 50%;
+            background: rgba(141,181,128,0.15);
+        }
+        .side-panel::after {
+            content: '';
+            position: absolute;
+            top: -40px; left: -40px;
+            width: 160px; height: 160px;
+            border-radius: 50%;
+            background: rgba(194,207,178,0.08);
+        }
+
+        .side-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 11px;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: var(--silver);
+            margin-bottom: 28px;
+        }
+
+        .side-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px;
+            font-weight: 300;
+            color: var(--white);
+            line-height: 1.15;
+        }
+
+        .side-title span {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .side-desc {
+            font-size: 13px;
+            color: rgba(194,207,178,0.7);
+            line-height: 1.6;
+            margin-top: 16px;
+        }
+
+        .side-steps {
+            margin-top: auto;
+            padding-top: 40px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            opacity: 0.6;
+        }
+
+        .step.active { opacity: 1; }
+
+        .step-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--silver);
+            flex-shrink: 0;
+        }
+
+        .step.active .step-dot { background: var(--green); }
+
+        .step-text {
+            font-size: 12px;
+            color: var(--silver);
+            letter-spacing: 0.04em;
+        }
+
+        /* Right form */
+        .form-panel {
+            flex: 1;
+            padding: 50px 48px;
+        }
+
+        .form-header {
+            margin-bottom: 36px;
+        }
+
+        .form-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 400;
+            color: var(--ink);
+        }
+
+        .form-header p {
+            font-size: 13px;
+            color: var(--mummy);
+            margin-top: 6px;
+        }
+
+        .success-msg {
+            background: rgba(141,181,128,0.15);
+            border-left: 3px solid var(--green);
+            color: var(--ink);
+            font-size: 13px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group.full { grid-column: span 2; }
+
+        label {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--mummy);
+        }
+
+        input {
+            padding: 13px 16px;
+            border: 1.5px solid rgba(126,137,135,0.25);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--ink);
+            background: var(--white);
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        input::placeholder { color: rgba(126,137,135,0.5); }
+
+        input:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(141,181,128,0.15);
+        }
+
+        .submit-btn {
+            grid-column: span 2;
+            margin-top: 8px;
+            padding: 15px;
+            background: var(--ink);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(141,181,128,0.2) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #3a3950;
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:hover::after { opacity: 1; }
+
+        @media (max-width: 680px) {
+            .wrapper { flex-direction: column; }
+            .side-panel { width: 100%; padding: 32px 28px; }
+            .form-panel { padding: 32px 24px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full { grid-column: span 1; }
+            .submit-btn { grid-column: span 1; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+    <div class="side-panel">
+        <div>
+            <div class="brand-icon"><img src="static\Screenshot 2026-06-07 135430.png " width="40" height="40"></a></div>
+            <div class="side-brand">HRMS</div>
+            <div class="side-title">Add New<br><span>Employee</span></div>
+            <p class="side-desc">Onboard a new team member by filling out the details on the right.</p>
+        </div>
+        <div class="side-steps">
+            <div class="step active">
+                <div class="step-dot"></div>
+                <div class="step-text">Personal Details</div>
+            </div>
+            <div class="step">
+                <div class="step-dot"></div>
+                <div class="step-text">Role & Salary</div>
+            </div>
+            <div class="step">
+                <div class="step-dot"></div>
+                <div class="step-text">Confirmation</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-panel">
+        <div class="form-header">
+            <h2>Employee Information</h2>
+            <p>All fields are required to complete onboarding.</p>
+        </div>
+
+        {% if message %}
+        <div class="success-msg">✓ {{ message }}</div>
+        {% endif %}
+
+        <form method="POST">
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label>Employee Name</label>
+                    <input type="text" name="name" placeholder="e.g. Priya Sharma" required>
+                </div>
+
+                <div class="form-group full">
+                    <label>Email Address</label>
+                    <input type="email" name="email" placeholder="priya@company.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Department</label>
+                    <input type="text" name="department" placeholder="e.g. Engineering" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Salary (₹)</label>
+                    <input type="number" name="salary" placeholder="e.g. 75000" required>
+                </div>
+
+                <button type="submit" class="submit-btn">Add Employee →</button>
+
+            </div>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

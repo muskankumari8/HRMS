@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Voice Interview Evaluator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --dust:   #DDD1C7;
+  --silver: #C2CFB2;
+  --green:  #8DB580;
+  --mummy:  #7E8987;
+  --indigo: #4B4A67;
+  --white:  #FAFAF8;
+  --dark:   #2a2938;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Outfit', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--dust);
+  color: var(--dark);
+  min-height: 100vh;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 50% at 88% 8%, rgba(141,181,128,0.16) 0%, transparent 65%),
+    radial-gradient(ellipse 45% 55% at 4% 90%, rgba(75,74,103,0.1) 0%, transparent 65%);
+}
+
+/* TOPBAR */
+.topbar {
+  background: rgba(75,74,103,0.97); backdrop-filter: blur(16px);
+  padding: 0 48px; height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid rgba(141,181,128,0.15);
+  position: sticky; top: 0; z-index: 50;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-icon { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--green), #6fa063); display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 0 18px rgba(141,181,128,0.35); }
+.brand-name { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--white); }
+.brand-name span { color: var(--green); }
+.topbar-right { display: flex; align-items: center; gap: 14px; }
+.badge { background: rgba(141,181,128,0.2); border: 1px solid rgba(141,181,128,0.35); color: var(--green); padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.back-btn { display: flex; align-items: center; gap: 8px; color: var(--dust); text-decoration: none; padding: 9px 18px; border-radius: 10px; font-size: 13px; font-weight: 500; border: 1px solid rgba(221,209,199,0.2); transition: 0.25s; }
+.back-btn:hover { background: rgba(221,209,199,0.12); }
+
+/* CONTENT */
+.content { position: relative; z-index: 1; padding: 56px 48px; max-width: 960px; margin: 0 auto; }
+
+.page-header { text-align: center; margin-bottom: 52px; animation: fadeUp 0.4s ease both; }
+.page-header h1 { font-family: var(--font-display); font-size: 44px; font-weight: 800; color: var(--indigo); letter-spacing: -0.02em; margin-bottom: 12px; }
+.page-header h1 span { color: var(--green); }
+.page-header p { color: var(--mummy); font-size: 15px; font-weight: 300; }
+
+/* STEP INDICATOR */
+.steps { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 44px; }
+.step { display: flex; align-items: center; gap: 10px; }
+.step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--indigo); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+.step.done .step-num { background: var(--green); }
+.step-text { font-size: 13px; font-weight: 600; color: var(--indigo); }
+.step-line { width: 60px; height: 2px; background: rgba(75,74,103,0.2); margin: 0 8px; }
+
+/* CARDS */
+.card {
+  background: var(--white);
+  border-radius: 22px;
+  padding: 40px 44px;
+  border: 1px solid rgba(75,74,103,0.07);
+  box-shadow: 0 8px 40px rgba(75,74,103,0.07);
+  margin-bottom: 28px;
+  animation: fadeUp 0.5s ease 0.1s both;
+}
+
+.card-title {
+  font-family: var(--font-display); font-size: 20px; font-weight: 700;
+  color: var(--indigo); margin-bottom: 24px;
+  display: flex; align-items: center; gap: 10px;
+}
+.card-title-icon { font-size: 22px; }
+
+.form-label {
+  display: block; font-size: 12px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--mummy); margin-bottom: 10px;
+}
+
+select {
+  width: 100%; padding: 14px 16px;
+  border: 1.5px solid rgba(75,74,103,0.15); border-radius: 12px;
+  font-family: var(--font-body); font-size: 14px; font-weight: 400;
+  color: var(--dark); background: var(--dust); outline: none; transition: 0.25s;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237E8987' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 16px center; padding-right: 44px;
+  cursor: pointer;
+}
+select:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(141,181,128,0.15); background-color: var(--white); }
+
+textarea {
+  width: 100%; padding: 18px 20px;
+  border: 1.5px solid rgba(75,74,103,0.15); border-radius: 14px;
+  font-family: var(--font-body); font-size: 14px; color: var(--dark);
+  background: var(--dust); resize: vertical; outline: none; transition: 0.25s;
+  line-height: 1.65;
+}
+textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(141,181,128,0.15); background: var(--white); }
+textarea::placeholder { color: var(--mummy); font-weight: 300; }
+
+/* QUESTION BOX */
+.question-box {
+  background: rgba(141,181,128,0.1);
+  border: 1px solid rgba(141,181,128,0.3);
+  border-radius: 14px; padding: 22px 24px;
+  margin-bottom: 24px;
+}
+.question-box h4 { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); margin-bottom: 10px; }
+.question-box p { font-size: 15px; color: var(--indigo); line-height: 1.6; font-weight: 500; }
+
+/* RECORDING CONTROLS */
+.record-controls { display: flex; gap: 12px; margin: 16px 0; }
+.rec-btn {
+  flex: 1; padding: 13px 20px; border: none; border-radius: 12px;
+  font-family: var(--font-body); font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: 0.25s; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.rec-btn-start { background: rgba(141,181,128,0.15); color: var(--green); border: 1.5px solid rgba(141,181,128,0.3); }
+.rec-btn-start:hover { background: rgba(141,181,128,0.25); }
+.rec-btn-stop { background: rgba(75,74,103,0.1); color: var(--indigo); border: 1.5px solid rgba(75,74,103,0.2); }
+.rec-btn-stop:hover { background: rgba(75,74,103,0.18); }
+
+.status-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 18px; border-radius: 20px;
+  font-size: 13px; font-weight: 600; margin: 10px 0 20px;
+  background: rgba(75,74,103,0.08); color: var(--mummy);
+  border: 1px solid rgba(75,74,103,0.12);
+  transition: 0.3s;
+}
+.status-pill.recording { background: rgba(192,85,74,0.1); color: #c0554a; border-color: rgba(192,85,74,0.2); }
+.status-pill.done { background: rgba(141,181,128,0.12); color: var(--green); border-color: rgba(141,181,128,0.25); }
+
+/* PRIMARY BTN */
+.primary-btn {
+  width: 100%; padding: 16px; border: none; border-radius: 14px; margin-top: 8px;
+  background: var(--indigo); color: var(--white);
+  font-family: var(--font-body); font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: 0.3s;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.primary-btn:hover { background: var(--green); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(141,181,128,0.3); }
+
+/* RESULT */
+.result-card {
+  background: var(--white); border-radius: 22px; padding: 36px 40px;
+  border: 1px solid rgba(141,181,128,0.25);
+  box-shadow: 0 6px 28px rgba(75,74,103,0.07);
+  position: relative; overflow: hidden;
+  animation: fadeUp 0.4s ease both;
+}
+.result-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+  background: linear-gradient(to bottom, var(--green), var(--indigo));
+  border-radius: 22px 0 0 22px;
+}
+.result-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.result-icon { width: 40px; height: 40px; border-radius: 12px; background: rgba(141,181,128,0.15); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.result-header h2 { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--indigo); }
+.result-body { white-space: pre-wrap; font-size: 14px; line-height: 1.8; color: var(--dark); font-family: var(--font-body); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <div class="brand">
+    <div class="brand-icon"><img src="static\Screenshot 2026-06-07 135430.png " width="40" height="40"></a></div>
+    <div class="brand-name">HRMS <span></span></div>
+  </div>
+  <div class="topbar-right">
+    <span class="badge">🎙️ Interview Evaluator</span>
+    <a href="/hr-dashboard" class="back-btn">← Dashboard</a>
+  </div>
+</nav>
+
+<div class="content">
+
+  <div class="page-header">
+    <h1>Interview <span>Evaluator</span> AI</h1>
+    <p>Generate smart interview questions and evaluate candidate answers with AI.</p>
+  </div>
+
+  <!-- STEP 1: Generate Question -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-icon">🎯</span> Step 1 — Generate Interview Question</div>
+    <form method="POST">
+      <label class="form-label">Select Skill</label>
+      <select name="skill" required>
+        <option value="">Choose a skill to generate question for...</option>
+        <option value="Python" {% if skill=="Python" %}selected{% endif %}>Python</option>
+        <option value="Java" {% if skill=="Java" %}selected{% endif %}>Java</option>
+        <option value="SQL" {% if skill=="SQL" %}selected{% endif %}>SQL</option>
+        <option value="Machine Learning" {% if skill=="Machine Learning" %}selected{% endif %}>Machine Learning</option>
+        <option value="Data Science" {% if skill=="Data Science" %}selected{% endif %}>Data Science</option>
+      </select>
+      <br><br>
+      <button type="submit" name="action" value="generate" class="primary-btn">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Generate Question
+      </button>
+    </form>
+  </div>
+
+  {% if question %}
+
+  <!-- QUESTION DISPLAY -->
+  <div class="question-box">
+    <h4>Generated Question for {{ skill }}</h4>
+    <p>{{ question }}</p>
+  </div>
+
+  <!-- STEP 2: Evaluate Answer -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-icon">🎙️</span> Step 2 — Record or Type Candidate Answer</div>
+
+    <form method="POST">
+      <input type="hidden" name="skill" value="{{ skill }}">
+      <input type="hidden" name="question" value="{{ question }}">
+
+      <label class="form-label">Candidate Answer</label>
+      <textarea id="answer" name="answer" rows="7" placeholder="Speak using the mic button below, or type the candidate's answer here..." required></textarea>
+
+      <div class="record-controls">
+        <button type="button" class="rec-btn rec-btn-start" onclick="startRecognition()">
+          🎤 Start Recording
+        </button>
+        <button type="button" class="rec-btn rec-btn-stop" onclick="stopRecognition()">
+          ⏹ Stop Recording
+        </button>
+      </div>
+
+      <div class="status-pill" id="status">⏺ Not Recording</div>
+
+      <button type="submit" name="action" value="evaluate" class="primary-btn">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Evaluate Answer
+      </button>
+    </form>
+  </div>
+
+  {% endif %}
+
+  {% if result %}
+  <div class="result-card">
+    <div class="result-header">
+      <div class="result-icon">🤖</div>
+      <h2>Evaluation Result</h2>
+    </div>
+    <div class="result-body">{{ result }}</div>
+  </div>
+  {% endif %}
+
+</div>
+
+<script>
+let recognition;
+
+function startRecognition() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert("Speech Recognition not supported in this browser."); return; }
+  recognition = new SR();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = "en-US";
+  const statusEl = document.getElementById("status");
+  statusEl.innerHTML = "🔴 Recording...";
+  statusEl.className = "status-pill recording";
+  recognition.start();
+  recognition.onresult = function(event) {
+    let transcript = "";
+    for (let i = 0; i < event.results.length; i++) {
+      transcript += event.results[i][0].transcript + " ";
+    }
+    document.getElementById("answer").value = transcript;
+  };
+}
+
+function stopRecognition() {
+  if (recognition) {
+    recognition.stop();
+    const statusEl = document.getElementById("status");
+    statusEl.innerHTML = "✅ Recording Complete";
+    statusEl.className = "status-pill done";
+  }
+}
+</script>
+</body>
+</html>

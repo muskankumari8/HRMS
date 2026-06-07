@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payroll Management - AI HRMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dust:   #DDD1C7;
+            --silver: #C2CFB2;
+            --green:  #8DB580;
+            --mummy:  #7E8987;
+            --ink:    #4B4A67;
+            --white:  #FAFAF8;
+            --shadow: rgba(75,74,103,0.13);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            background: var(--dust);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -180px; right: -120px;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(141,181,128,0.2) 0%, transparent 65%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -120px; left: -80px;
+            width: 380px; height: 380px;
+            background: radial-gradient(circle, rgba(194,207,178,0.25) 0%, transparent 65%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 860px;
+            background: var(--white);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 8px 48px var(--shadow);
+            animation: fadeIn 0.7s ease both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity:0; transform: translateY(28px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+
+        /* Side panel */
+        .side-panel {
+            width: 240px;
+            flex-shrink: 0;
+            background: var(--ink);
+            padding: 48px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .side-panel::before {
+            content: '';
+            position: absolute;
+            bottom: -60px; right: -60px;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            background: rgba(141,181,128,0.15);
+        }
+
+        .side-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 10px;
+            letter-spacing: 0.26em;
+            text-transform: uppercase;
+            color: var(--silver);
+        }
+
+        .side-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 34px;
+            font-weight: 300;
+            color: var(--white);
+            line-height: 1.15;
+        }
+
+        .side-title span { color: var(--green); font-weight: 600; }
+
+        .side-desc {
+            font-size: 13px;
+            color: rgba(194,207,178,0.65);
+            line-height: 1.6;
+        }
+
+        .breakdown-preview {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bp-label {
+            font-size: 10px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(194,207,178,0.5);
+            margin-bottom: 4px;
+        }
+
+        .bp-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: rgba(194,207,178,0.7);
+        }
+
+        .bp-row span:last-child { color: var(--silver); font-weight: 500; }
+
+        /* Form panel */
+        .form-panel { flex: 1; padding: 48px 44px; }
+
+        .form-header { margin-bottom: 32px; }
+
+        .form-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 400;
+            color: var(--ink);
+        }
+
+        .form-header p { font-size: 13px; color: var(--mummy); margin-top: 6px; }
+
+        .field-group { margin-bottom: 20px; }
+
+        .field-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--mummy);
+            margin-bottom: 8px;
+        }
+
+        .select-wrap { position: relative; }
+        .select-wrap::after {
+            content: '▾';
+            position: absolute;
+            right: 16px; top: 50%;
+            transform: translateY(-50%);
+            color: var(--mummy);
+            pointer-events: none;
+            font-size: 12px;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid rgba(126,137,135,0.25);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--ink);
+            background: var(--white);
+            appearance: none;
+            -webkit-appearance: none;
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        input[type="number"]::placeholder { color: rgba(126,137,135,0.5); }
+
+        select:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(141,181,128,0.15);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(126,137,135,0.15);
+            margin: 24px 0;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--ink);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            letter-spacing: 0.07em;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #3a3950;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(75,74,103,0.25);
+        }
+
+        .success-msg {
+            margin-top: 22px;
+            padding: 16px 20px;
+            background: rgba(141,181,128,0.12);
+            border-left: 3px solid var(--green);
+            border-radius: 10px;
+            font-size: 13px;
+            color: var(--ink);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 680px) {
+            .wrapper { flex-direction: column; }
+            .side-panel { width: 100%; padding: 32px 28px; }
+            .form-panel { padding: 32px 24px; }
+            .input-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+    <div class="side-panel">
+        <div class="brand-icon"><img src="static\Screenshot 2026-06-07 135430.png " width="40" height="40"></a></div>
+        <div class="side-brand">HRMS</div>
+        <div>
+            <div class="side-title">Payroll<br><span>Management</span></div>
+            <p class="side-desc">Generate accurate payslips by entering salary components below.</p>
+        </div>
+        <div class="breakdown-preview">
+            <div class="bp-label">Calculation</div>
+            <div class="bp-row"><span>Basic Salary</span><span>+ Base</span></div>
+            <div class="bp-row"><span>Bonus</span><span>+ Added</span></div>
+            <div class="bp-row"><span>Deduction</span><span>− Subtracted</span></div>
+            <div class="bp-row" style="border-top:1px solid rgba(194,207,178,0.15); padding-top:10px; color: var(--silver);">
+                <span>Net Pay</span><span>= Total</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-panel">
+        <div class="form-header">
+            <h2>Generate Payroll</h2>
+            <p>Fill in the salary components to compute net pay.</p>
+        </div>
+
+        <form method="POST">
+
+            <div class="field-group">
+                <label class="field-label">Employee</label>
+                <div class="select-wrap">
+                    <select name="employee_name" required>
+                        <option value="">— Select employee —</option>
+                        {% for employee in employees %}
+                        <option value="{{ employee[0] }}">{{ employee[0] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label class="field-label">Basic Salary (₹)</label>
+                <input type="number" name="basic_salary" placeholder="e.g. 60000" required>
+            </div>
+
+            <div class="input-row">
+                <div class="field-group" style="margin-bottom:0">
+                    <label class="field-label">Bonus (₹)</label>
+                    <input type="number" name="bonus" placeholder="e.g. 5000">
+                </div>
+                <div class="field-group" style="margin-bottom:0">
+                    <label class="field-label">Deduction (₹)</label>
+                    <input type="number" name="deduction" placeholder="e.g. 2000">
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <button type="submit" class="submit-btn">Generate Payroll →</button>
+
+        </form>
+
+        {% if message %}
+        <div class="success-msg">✓ {{ message }}</div>
+        {% endif %}
+    </div>
+
+</div>
+
+</body>
+</html>

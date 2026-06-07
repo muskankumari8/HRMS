@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dust:    #DDD1C7;
+            --silver:  #C2CFB2;
+            --green:   #8DB580;
+            --mummy:   #7E8987;
+            --ink:     #4B4A67;
+            --white:   #FAFAF8;
+            --shadow:  rgba(75,74,103,0.12);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--dust);
+            min-height: 100vh;
+            padding: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Organic background blobs */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -120px; right: -120px;
+            width: 480px; height: 480px;
+            background: radial-gradient(circle, rgba(141,181,128,0.25) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -80px; left: -80px;
+            width: 360px; height: 360px;
+            background: radial-gradient(circle, rgba(194,207,178,0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        header {
+            padding: 48px 60px 0;
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+        }
+
+        .brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--mummy);
+        }
+
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 42px;
+            font-weight: 300;
+            color: var(--ink);
+            letter-spacing: -0.01em;
+            line-height: 1;
+        }
+
+        header h1 span {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: var(--mummy);
+            letter-spacing: 0.05em;
+            margin-left: auto;
+            align-self: center;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px;
+            padding: 44px 60px 60px;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard { grid-template-columns: repeat(2, 1fr); padding: 30px 24px; }
+            header { padding: 32px 24px 0; flex-wrap: wrap; }
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 34px 24px 30px;
+            box-shadow: 0 2px 24px var(--shadow);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.05s; }
+        .card:nth-child(2) { animation-delay: 0.12s; }
+        .card:nth-child(3) { animation-delay: 0.19s; }
+        .card:nth-child(4) { animation-delay: 0.26s; }
+        .card:nth-child(5) { animation-delay: 0.33s; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 36px var(--shadow);
+        }
+
+        /* Decorative circle top-right */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -28px; right: -28px;
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            opacity: 0.18;
+        }
+
+        .card-total::before  { background: var(--ink); }
+        .card-present::before{ background: var(--green); }
+        .card-absent::before { background: #c97c6e; }
+        .card-wfh::before    { background: var(--silver); }
+        .card-leave::before  { background: var(--mummy); }
+
+        .card-label {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .card-total  .card-label { color: var(--ink); }
+        .card-present .card-label{ color: var(--green); }
+        .card-absent  .card-label{ color: #b0665a; }
+        .card-wfh    .card-label { color: var(--mummy); }
+        .card-leave  .card-label { color: var(--mummy); }
+
+        .number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 58px;
+            font-weight: 600;
+            line-height: 1;
+            color: var(--ink);
+        }
+
+        .card-present .number { color: var(--green); }
+        .card-absent  .number { color: #b0665a; }
+
+        .card-icon {
+            position: absolute;
+            bottom: 18px; right: 20px;
+            font-size: 22px;
+            opacity: 0.25;
+        }
+
+        /* Thin accent bar bottom */
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 24px; right: 24px;
+            height: 2px;
+            border-radius: 2px;
+            opacity: 0.35;
+        }
+        .card-total::after  { background: var(--ink); }
+        .card-present::after{ background: var(--green); }
+        .card-absent::after { background: #c97c6e; }
+        .card-wfh::after    { background: var(--mummy); }
+        .card-leave::after  { background: var(--silver); }
+
+        /* wide first card on large screens */
+        @media (min-width: 901px) {
+            .card-total {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <div class="brand-icon"><img src="static\Screenshot 2026-06-07 135430.png " width="40" height="40"></a></div>
+        <div class="brand">HRMS</div>
+        <h1>Attendance <span>Dashboard</span></h1>
+    </div>
+    <div class="subtitle">Today's Overview</div>
+</header>
+
+<div class="dashboard">
+
+    <div class="card card-total">
+        <div class="card-label">Total Employees</div>
+        <div class="number">{{ total_employees }}</div>
+        <div class="card-icon">👥</div>
+    </div>
+
+    <div class="card card-present">
+        <div class="card-label">Present</div>
+        <div class="number">{{ present }}</div>
+        <div class="card-icon">✅</div>
+    </div>
+
+    <div class="card card-absent">
+        <div class="card-label">Absent</div>
+        <div class="number">{{ absent }}</div>
+        <div class="card-icon">🔴</div>
+    </div>
+
+    <div class="card card-wfh">
+        <div class="card-label">Work From Home</div>
+        <div class="number">{{ wfh }}</div>
+        <div class="card-icon">🏠</div>
+    </div>
+
+    <div class="card card-leave">
+        <div class="card-label">On Leave</div>
+        <div class="number">{{ leave }}</div>
+        <div class="card-icon">🌿</div>
+    </div>
+
+</div>
+
+</body>
+</html>
