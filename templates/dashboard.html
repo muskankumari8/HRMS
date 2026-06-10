@@ -237,6 +237,181 @@ body::before {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+@media (max-width: 1024px) {
+
+  :root {
+    --sidebar-width: 220px;
+  }
+
+  .content {
+    padding: 40px 30px;
+  }
+
+  .welcome-banner {
+    padding: 30px;
+  }
+
+  .welcome-text h2 {
+    font-size: 26px;
+  }
+
+  .cards-grid {
+    gap: 18px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  body {
+    flex-direction: column;
+  }
+
+  /* Sidebar becomes top menu */
+  .sidebar {
+    position: relative;
+    width: 100%;
+    min-height: auto;
+    height: auto;
+  }
+
+  .sidebar-logo {
+    justify-content: center;
+    padding: 18px;
+  }
+
+  .sidebar-section-label {
+    text-align: center;
+    padding: 12px 10px 5px;
+  }
+
+  .nav-item {
+    margin: 5px 12px;
+  }
+
+  .sidebar-footer {
+    margin-top: 15px;
+    padding-top: 15px;
+  }
+
+  .main {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .topbar {
+    padding: 12px 20px;
+    height: auto;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .page-title {
+    font-size: 18px;
+  }
+
+  .content {
+    padding: 20px 15px;
+  }
+
+  .welcome-banner {
+    flex-direction: column;
+    text-align: center;
+    gap: 18px;
+    padding: 25px 20px;
+  }
+
+  .welcome-text h2 {
+    font-size: 24px;
+  }
+
+  .welcome-text p {
+    font-size: 14px;
+  }
+
+  .welcome-emoji {
+    font-size: 50px;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .feature-card {
+    padding: 25px 20px;
+  }
+
+  .card-title {
+    font-size: 18px;
+  }
+
+  .card-desc {
+    font-size: 13px;
+  }
+
+  .card-arrow {
+    right: 20px;
+    bottom: 20px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+
+  .sidebar-logo img,
+  .brand-icon img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .logo-text {
+    font-size: 14px;
+  }
+
+  .page-title {
+    font-size: 16px;
+  }
+
+  .role-badge {
+    font-size: 10px;
+    padding: 4px 10px;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .welcome-text h2 {
+    font-size: 22px;
+  }
+
+  .feature-card {
+    padding: 22px 18px;
+  }
+
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+
+  .card-title {
+    font-size: 16px;
+  }
+
+  .card-desc {
+    font-size: 12px;
+  }
+
+  .card-arrow {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+}
 </style>
 </head>
 <body>
@@ -244,7 +419,7 @@ body::before {
 <!-- TOPBAR -->
 <nav class="topbar">
   <div class="brand">
-    <div class="brand-icon"><img src="static\Screenshot 2026-06-07 135430.png " width="40" height="40"></a></div>
+    <div class="brand-icon"><img src="{{ url_for('static', filename='Screenshot 2026-06-07 135430.png') }}" width="40" height="40"></a></div>
     <div class="brand-name"><span>HRMS</span></div>
   </div>
   <div class="topbar-actions">

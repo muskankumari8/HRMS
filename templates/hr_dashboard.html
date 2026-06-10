@@ -230,6 +230,171 @@ body::before {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+@media (max-width: 1024px) {
+
+  :root {
+    --sidebar-width: 220px;
+  }
+
+  .content {
+    padding: 40px 30px;
+  }
+
+  .tools-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .welcome-banner {
+    padding: 32px;
+  }
+
+  .welcome-text h2 {
+    font-size: 28px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  body {
+    flex-direction: column;
+  }
+
+  /* Sidebar becomes top navigation */
+  .sidebar {
+    position: relative;
+    width: 100%;
+    min-height: auto;
+    height: auto;
+  }
+
+  .sidebar-logo {
+    justify-content: center;
+    padding: 18px;
+  }
+
+  .sidebar-section-label {
+    text-align: center;
+    padding: 15px 10px 5px;
+  }
+
+  .nav-item {
+    margin: 5px 12px;
+  }
+
+  .sidebar-footer {
+    margin-top: 15px;
+    padding-top: 15px;
+  }
+
+  .main {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .topbar {
+    padding: 0 20px;
+    height: auto;
+    min-height: 65px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .page-title {
+    font-size: 18px;
+  }
+
+  .content {
+    padding: 25px 15px;
+  }
+
+  .welcome-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 25px 20px;
+    gap: 20px;
+  }
+
+  .welcome-text h2 {
+    font-size: 26px;
+  }
+
+  .welcome-text p {
+    font-size: 14px;
+  }
+
+  .welcome-emoji {
+    font-size: 50px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .section-line {
+    width: 100%;
+  }
+
+  .tools-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .tool-card {
+    padding: 25px 20px;
+  }
+
+  .tool-name {
+    font-size: 18px;
+  }
+
+  .tool-desc {
+    font-size: 13px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+
+  .sidebar-logo img,
+  .brand-icon img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .logo-text {
+    font-size: 14px;
+  }
+
+  .page-title {
+    font-size: 16px;
+  }
+
+  .welcome-text h2 {
+    font-size: 22px;
+  }
+
+  .tool-icon {
+    font-size: 32px;
+  }
+
+  .tool-name {
+    font-size: 16px;
+  }
+
+  .tool-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+}
 </style>
 </head>
 <body>
@@ -237,7 +402,7 @@ body::before {
 <!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sidebar-logo">
-    <div class="brand-icon"><img src="static\Screenshot 2026-06-07 135430.png " width="40" height="40"></a></div>
+    <div class="brand-icon"><img src="{{ url_for('static', filename='Screenshot 2026-06-07 135430.png') }}" width="40" height="40"></a></div>
     <div class="logo-text">
       HR Recruiter
     </div>
