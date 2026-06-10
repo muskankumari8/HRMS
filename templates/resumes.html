@@ -173,6 +173,164 @@ input[type="file"] {
   from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+/* ==================================
+   RESPONSIVE DESIGN
+================================== */
+
+@media (max-width: 992px){
+
+  .content{
+    padding:40px 25px;
+  }
+
+  .form-card{
+    padding:35px 25px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+    gap:25px;
+  }
+
+  .page-header h1{
+    font-size:36px;
+  }
+
+}
+
+@media (max-width: 768px){
+
+  .topbar{
+    padding:15px 20px;
+    height:auto;
+    flex-direction:column;
+    gap:15px;
+    text-align:center;
+  }
+
+  .topbar-right{
+    flex-direction:column;
+    width:100%;
+    gap:10px;
+  }
+
+  .back-btn{
+    width:100%;
+    justify-content:center;
+  }
+
+  .content{
+    padding:30px 15px;
+  }
+
+  .page-header{
+    margin-bottom:35px;
+  }
+
+  .page-header h1{
+    font-size:30px;
+    line-height:1.2;
+  }
+
+  .page-header p{
+    font-size:14px;
+  }
+
+  .form-card{
+    padding:25px 18px;
+    border-radius:18px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+
+  textarea{
+    min-height:180px;
+    font-size:14px;
+  }
+
+  .file-upload-area{
+    min-height:180px;
+    padding:25px 15px;
+  }
+
+  .upload-icon{
+    font-size:32px;
+  }
+
+  .submit-btn{
+    padding:14px;
+    font-size:14px;
+  }
+
+  .result-card{
+    padding:25px 20px;
+  }
+
+  .result-header{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  .result-header h2{
+    font-size:20px;
+  }
+
+  .result-body{
+    font-size:13px;
+    line-height:1.7;
+    word-wrap:break-word;
+  }
+
+}
+
+@media (max-width: 480px){
+
+  .brand{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  .brand-name{
+    font-size:16px;
+  }
+
+  .badge{
+    font-size:11px;
+    padding:5px 10px;
+  }
+
+  .page-header h1{
+    font-size:26px;
+  }
+
+  .form-card{
+    padding:20px 15px;
+  }
+
+  textarea{
+    padding:15px;
+  }
+
+  .file-upload-area{
+    min-height:160px;
+  }
+
+  .upload-text{
+    font-size:13px;
+  }
+
+  .upload-hint{
+    font-size:11px;
+  }
+
+  .submit-btn{
+    font-size:13px;
+  }
+
+}
 </style>
 </head>
 <body>
@@ -180,7 +338,7 @@ input[type="file"] {
 <!-- TOPBAR -->
 <nav class="topbar">
   <div class="brand">
-    <div class="brand-icon"><img src="static\Screenshot 2026-06-07 135430.png " width="40" height="40"></a></div>
+    <div class="brand-icon"><img src="{{ url_for('static', filename='Screenshot 2026-06-07 135430.png') }}" width="40" height="40"></a></div>
     <div class="brand-name">HRMS <span></span></div>
   </div>
   <div class="topbar-right">
