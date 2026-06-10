@@ -19,23 +19,23 @@ Project URL:
 ## Demo Login Credentials
 
 ### Admin
-Username: admin
-Password: 123
+Username: admin,
+Password: 123,
 Role: Admin
 
 ### HR Recruiter
-Username: hr
-Password: 123
+Username: hr,
+Password: 123,
 Role: HR Recruiter
 
 ### Senior Manager
-Username: manager
-Password: 123
+Username: manager,
+Password: 123,
 Role: Senior Manager
 
 ### Employee
-Username: employee
-Password: 123
+Username: employee,
+Password: 123,
 Role: Employee
 
 ---
